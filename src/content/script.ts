@@ -5,39 +5,22 @@
  *
  * A `---` line marks a click. The text before the first `---` is spoken over the
  * slide's first state, and each later block over the next build state.
+ *
+ * Only the /script page and the local API import this file. The deck fetches the
+ * script from /api/script, so the slides deploy without it (see .vercelignore).
  */
 
-export const CLICK_MARK = "---";
+import { CLICK_MARK } from "./script-format";
 
-/** Same basis as the Ch.2 deck: Korean speech at about 320 non-space chars a minute. */
-export const CHARS_PER_MINUTE = 320;
-
-const DIVIDER_LINE = /^[ \t]*---[ \t]*$/m;
-
-export function splitSegments(text: string): string[] {
-  return text.split(DIVIDER_LINE).map((s) => s.trim());
-}
-
-export function speechChars(text: string): number {
-  return text.split(DIVIDER_LINE).join("").replace(/\s+/g, "").length;
-}
-
-export function estimateSeconds(text: string): number {
-  return Math.round((speechChars(text) / CHARS_PER_MINUTE) * 60);
-}
-
-export function mmss(total: number): string {
-  const m = Math.floor(total / 60);
-  const s = Math.floor(total % 60);
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-}
-
-/** Which click block a caret position falls in. */
-export function stepAtCaret(text: string, caret: number): number {
-  const before = text.slice(0, caret);
-  const matches = before.match(new RegExp(DIVIDER_LINE.source, "gm"));
-  return matches ? matches.length : 0;
-}
+export {
+  CHARS_PER_MINUTE,
+  CLICK_MARK,
+  estimateSeconds,
+  mmss,
+  speechChars,
+  splitSegments,
+  stepAtCaret,
+} from "./script-format";
 
 const clicks = (...blocks: string[]) => blocks.join(`\n${CLICK_MARK}\n`);
 

@@ -1,0 +1,10 @@
+# Deploy the slides only. The presenter's script, the /script editor and its API stay on
+# this machine; the deck fetches the script from /api/script, which the deploy does not have,
+# so its notes, script link and time estimates simply stay hidden there.
+/src/app/script
+/src/app/api
+/src/server
+/src/content/script.ts
+/content
+/cover-concepts
+/*.tsbuildinfo

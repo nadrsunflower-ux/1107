@@ -7,8 +7,9 @@ const MAX_LENGTH = 20_000;
 export async function GET() {
   await connection(); // edits land on disk at runtime, so this must never be prerendered
   try {
+    /* the deck's notes read `script` from here, so the script never ships in the deck bundle */
     return Response.json(
-      { overrides: await readOverrides() },
+      { overrides: await readOverrides(), script: SCRIPT },
       { headers: { "Cache-Control": "no-store" } },
     );
   } catch {

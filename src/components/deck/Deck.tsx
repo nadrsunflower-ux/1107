@@ -20,10 +20,10 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { SLIDES } from "@/content/registry";
-import { SCRIPT, estimateSeconds, mmss, splitSegments } from "@/content/script";
+import { estimateSeconds, mmss, splitSegments } from "@/content/script-format";
 import { SECTIONS } from "@/content/sections";
 import { C } from "@/lib/design";
-import { useScriptOverrides } from "@/lib/use-script-overrides";
+import { usePresenterScript } from "@/lib/use-presenter-script";
 import { cn } from "@/lib/utils";
 import { PositionContext, StepContext } from "./context";
 import { Stage } from "./Stage";
@@ -49,12 +49,11 @@ export function Deck() {
   const { index, step } = pos;
   const meta = SLIDES[index];
 
-  /* times are estimated from the script text, so edits on /script move them too */
-  const overrides = useScriptOverrides();
-  const textOf = React.useCallback(
-    (id: string) => overrides[id] ?? SCRIPT[id] ?? "",
-    [overrides],
-  );
+  /* times are estimated from the script text, so edits on /script move them too.
+     The public deploy has no script, and then the notes, the script link and the times stay hidden. */
+  const script = usePresenterScript();
+  const hasScript = script !== null;
+  const textOf = React.useCallback((id: string) => script?.[id] ?? "", [script]);
   const timing = React.useMemo(() => {
     const seconds = SLIDES.map((s) => (s.appendix ? 0 : estimateSeconds(textOf(s.id))));
     const starts = seconds.reduce<number[]>((acc, _sec, i) => {
@@ -149,13 +148,13 @@ export function Deck() {
           jump(COUNT - 1);
           return;
       }
-      if (k === "n") setNotesOpen((v) => !v);
+      if (k === "n" && hasScript) setNotesOpen((v) => !v);
       if (k === "o") setOverviewOpen(true);
       if (k === "f") toggleFull();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [next, prev, jump, toggleFull, overviewOpen]);
+  }, [next, prev, jump, toggleFull, overviewOpen, hasScript]);
 
   /* timer only ticks while the notes panel can show it */
   React.useEffect(() => {
@@ -219,22 +218,26 @@ export function Deck() {
             <CtrlButton label="전체 보기 (O)" onClick={() => setOverviewOpen(true)}>
               <LayoutGrid />
             </CtrlButton>
-            <CtrlButton label="발표자 노트 (N)" onClick={() => setNotesOpen((v) => !v)}>
-              <NotebookText />
-            </CtrlButton>
-            <CtrlButton
-              label="대본 사이트 열기"
-              onClick={() => window.open(`/script#s-${index + 1}`, "bmi-script")}
-            >
-              <FileText />
-            </CtrlButton>
+            {hasScript && (
+              <>
+                <CtrlButton label="발표자 노트 (N)" onClick={() => setNotesOpen((v) => !v)}>
+                  <NotebookText />
+                </CtrlButton>
+                <CtrlButton
+                  label="대본 사이트 열기"
+                  onClick={() => window.open(`/script#s-${index + 1}`, "bmi-script")}
+                >
+                  <FileText />
+                </CtrlButton>
+              </>
+            )}
             <CtrlButton label="전체 화면 (F)" onClick={toggleFull}>
               {isFull ? <Minimize2 /> : <Maximize2 />}
             </CtrlButton>
           </div>
         </div>
 
-        {notesOpen && (
+        {notesOpen && hasScript && (
           <aside className="flex h-full w-[400px] shrink-0 flex-col gap-4 overflow-y-auto border-l border-line bg-white p-5 text-[15px] leading-[1.6] text-ink">
             <div className="flex items-center justify-between">
               <div className="text-[13px] font-semibold text-mute">
@@ -305,7 +308,7 @@ export function Deck() {
         <DialogContent className="max-h-[86vh] w-[min(1080px,92vw)] max-w-none overflow-y-auto sm:max-w-none">
           <DialogHeader>
             <DialogTitle className="text-[18px] font-bold">
-              전체 {COUNT}장 · 예상 {mmss(timing.total)}
+              전체 {COUNT}장{hasScript && ` · 예상 ${mmss(timing.total)}`}
             </DialogTitle>
           </DialogHeader>
           <div className="columns-2 gap-6">

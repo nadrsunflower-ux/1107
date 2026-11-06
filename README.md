@@ -22,7 +22,7 @@ npm run build && npm start   # http://localhost:3300
 | → · Space · PageDown · 클릭 | 다음 단계 또는 다음 장 |
 | ← · PageUp · 화면 왼쪽 끝 클릭 | 이전 |
 | F | 전체 화면 |
-| N | 이 장의 대본(현재 클릭 강조), 예상 시간, 타이머 |
+| N | 이 장의 대본(현재 클릭 강조), 예상 시간, 타이머. 이 컴퓨터에서 띄운 덱에서만 |
 | O | 전체 슬라이드 목록에서 바로 이동 |
 | Home · End | 처음 · 끝 |
 
@@ -42,8 +42,17 @@ npm run build && npm start   # http://localhost:3300
 | `src/content/script.ts` | 처음 작성한 원본. 되돌리기의 기준이라 편집기가 건드리지 않는다. |
 | `content/script-overrides.json` | **브라우저에서 수정한 내용.** 이 파일이 수정본의 전부이므로 지우지 않는다. |
 
-수정 저장은 이 컴퓨터에서 서버를 띄웠을 때만 동작한다. 서버는 이 컴퓨터에서만 접속되도록(`-H localhost`) 띄우며,
-Vercel 같은 곳에 배포하면 파일 시스템이 읽기 전용이라 저장되지 않는다.
+수정 저장은 이 컴퓨터에서 서버를 띄웠을 때만 동작한다. 서버는 이 컴퓨터에서만 접속되도록(`-H localhost`) 띄운다.
+덱의 노트(N)도 대본을 코드에 담지 않고 이 서버의 `/api/script`에서 받아 온다.
+
+## 배포 (발표 화면만)
+
+- 주소: https://bmi-dc-lecture.vercel.app (Vercel 프로젝트 `bmi-dc-lecture`)
+- 다시 배포: 이 폴더에서 `vercel deploy --prod`. GitHub `nadrsunflower-ux/1107`의 `main`에 푸시해도 자동 배포된다.
+- **배포본에는 대본이 없다.** `.vercelignore`가 대본 페이지(`/script`), 대본 API, 원본(`src/content/script.ts`),
+  수정본(`content/`)을 업로드에서 뺀다. 그래서 배포본에서는 노트(N), 대본 버튼, 예상 시간이 나타나지 않는다.
+- 덱 코드에서 `@/content/script`를 다시 import하면 배포 빌드가 파일을 찾지 못해 실패한다.
+  대본이 실수로 공개되는 대신 배포가 멈춘다. 덱에 필요한 계산 함수는 `src/content/script-format.ts`에 있다.
 
 ## 어디를 고치나
 
