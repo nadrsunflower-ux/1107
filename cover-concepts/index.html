@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>표지 일러스트 시안 보드</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 48px 56px 72px;
+    background: #fdf6e5;
+    color: #1a1a18;
+    font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", system-ui, sans-serif;
+    word-break: keep-all;
+  }
+  main { max-width: 1400px; margin: 0 auto; }
+  h1 { margin: 0; font-size: 34px; font-weight: 800; letter-spacing: -0.03em; }
+  .lead { margin: 10px 0 28px; font-size: 19px; line-height: 1.55; color: #4c4b46; }
+  .lead b { color: #1a1a18; }
+  img { display: block; width: 100%; height: auto; }
+  .board { border-radius: 14px; overflow: hidden; box-shadow: 0 2px 18px rgba(60, 45, 10, .12); }
+  h2 { margin: 44px 0 6px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
+  .note { margin: 0 0 18px; font-size: 17px; line-height: 1.5; color: #4c4b46; }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 480px)); gap: 28px; }
+  figure { margin: 0; }
+  figure img { border-radius: 12px; box-shadow: 0 2px 14px rgba(60, 45, 10, .1); }
+  figcaption { margin-top: 10px; font-size: 17px; font-weight: 600; }
+  figcaption span { font-weight: 400; color: #75736b; }
+</style>
+</head>
+<body>
+<main>
+  <h1>표지 일러스트 시안 10종</h1>
+  <p class="lead">
+    지금 표지에는 <b>2번 변신하는 가게</b>를 넣어 두었습니다.
+    다른 번호를 말씀해 주시면 같은 규격으로 만들어 바꿉니다.
+  </p>
+  <div class="board"><img src="board_v1.png" alt="서로 다른 은유와 화풍의 표지 일러스트 시안 10종을 5열 2행으로 모은 보드" /></div>
+
+  <h2>2번의 실제 규격 두 가지</h2>
+  <p class="note">가운데에 사람이 있는 쪽을 표지에 썼습니다.</p>
+  <div class="pair">
+    <figure>
+      <img src="cover_a.png" alt="원형 도로 가운데에서 경영자가 설계도를 고치는 2번 일러스트" />
+      <figcaption>A. 가운데에 설계도를 고치는 경영자 <span>표지에 적용</span></figcaption>
+    </figure>
+    <figure>
+      <img src="cover_b.png" alt="원형 도로 가운데가 잔디와 나무로만 된 2번 일러스트" />
+      <figcaption>B. 가운데는 잔디와 나무만</figcaption>
+    </figure>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,14 @@
+[
+ {
+  "out": "cover_a.png",
+  "prompt_file": "cover_a.txt",
+  "aspect_ratio": "3:4",
+  "quality": "high"
+ },
+ {
+  "out": "cover_b.png",
+  "prompt_file": "cover_b.txt",
+  "aspect_ratio": "3:4",
+  "quality": "high"
+ }
+]
